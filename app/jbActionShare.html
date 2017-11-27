@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="css/global.css" type="text/css" />
+    <link rel="stylesheet" href="./css/zy.media.min.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="js/mui.min.js"></script>
+    <script src="js/config.js"></script>
+    <style>
+        .content_text{
+            text-indent: 30px;
+        }
+        .explain{
+
+        }
+        .explain_title{
+            height:50px;
+            background-color:#ebeef6;
+            line-height: 50px;
+            font-size: 16px;
+            text-align: center;
+        }
+        .explain_detail{
+            padding: 0;
+            margin: 20px 30px;
+        }
+        .explain_detail li{
+            overflow: hidden;
+            list-style: none;
+            font-size: 14px;
+        }
+        .explain_detail li div{
+            float: left;
+        }
+        .xiazai{
+            height:50px;
+            width:100%;
+            background:#d0d6ea;
+            position: fixed;
+            bottom:0;
+            line-height: 50px;
+
+        }
+        .xzbtn{
+            position: absolute;
+            right:10px;
+            border-radius: 20px;
+            width:80px;
+            height:30px;
+            margin-top: 8px;
+            display: inline-block;
+            background-color: #646a96;
+            line-height: 20px;
+            color: #fff;
+            padding-left: 10px;
+        }
+        .xzfont{
+            line-height:30px;
+            background: url("./img/xiazai.png") no-repeat left center;
+            background-size:18px;
+            padding-left: 28px;
+        }
+        .erweima{
+            text-align: center;
+            margin:70px;
+
+        }
+        .erfont{
+            display: block;
+            color: #666666;
+            font-size: 12px;
+        }
+        .m{margin-left: auto; margin-right: auto;position: relative}
+        .my-video-dimensions{
+            width: 100%;
+            height: 200px;
+        }
+    </style>
+</head>
+<body onmousewheel="return false;">
+<div style="margin:15px; font-family: Arial">
+    <h3 class="content_title_text"></h3>
+    <div class="source_view_t">
+        <p class="source_text" style="padding-top: 20px;">福道时代——活动</p>
+    </div>
+</div>
+<div class="m">
+    <div style="position:absolute;right:10px;top:20px;z-index: 10000">
+        <img src='./img/jingyin.png' style="width: 26px; height: 26px"/>
+    </div>
+    <video id="my-video" class="video-js vjs-default-skin vjs-big-play-centered  " controls preload="auto" width="100%" height="200"
+           poster="m.png" data-setup="{}">
+        <source src="./img/f7a15b5065686ec0b9486b0e584a944c.mp4 " type="video/mp4">
+        <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a web browser that
+            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+        </p>
+    </video>
+</div>
+<div class="explain">
+    <div class="explain_title"><span class="content_title_"></span>活动说明</div>
+    <ul class="explain_detail">
+        <li style=" margin-bottom: 10px">
+            <div style="width:18%;text-align: center">效果：</div>
+
+            <div style="width:76%" class="xiaoguo"></div>
+        </li>
+        <li style=" margin-bottom: 10px">
+            <div style="width:18%;text-align: center">方法：</div>
+            <div style="width:76%" class="fangfa"></div>
+        </li>
+        <li style=" margin-bottom: 10px">
+            <div style="width:18%;text-align: center">注意：</div>
+            <div style="width:76%" class="zhuyi"></div>
+        </li>
+    </ul>
+</div>
+
+<div class="xiazai">
+    <div style="margin:0 auto;">
+        <span style="margin-left:10px;">更多养生动作请下载「活动」App</span>
+        <a class="xzbtn">
+            <span class="xzfont">下载</span>
+        </a>
+    </div>
+
+</div>
+<div class="erweima">
+    <img style="height:80px;background: red" src="./img/er.png" alt="">
+    <span class="erfont" >（限安卓用户）</span>
+</div>
+<script src="./js/zy.media.min.js"></script>
+<script type="text/javascript">
+    //http://localhost:3000/articleDetail.html?token=867200022156895,86720002215690393791782&id=389
+    //867200022156895,86720002215690393791782
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var argumentId=getQueryString('id');;
+    var title;
+    $.ajax({
+        type:"post",
+        url:urls.SHAREAPI_GETSHAREONEACTTIVITY,
+        data:{
+            actId:2
+        },
+        success:function(msg){
+            var jsonObj= msg.obj.activity;
+            $('.content_title_text').html(jsonObj.name);
+            $('.content_title_').html(jsonObj.name);
+            $('title').html(jsonObj.name);
+            /*var newContent=jsonObj.content.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi,function(match,capture){
+                //capture,返回每个匹配的字符串
+                var newStr='<img src="'+urls.IMGSRC+capture+' "style="width:100%; height:auto;margin-left: -30px" />';
+                return newStr;
+            });
+            $('.content_text').html(newContent);
+            title=jsonObj.title;*/
+            $('.xiaoguo').html(jsonObj.effect);
+            $('.fangfa').html(jsonObj.act_method);
+            $('.zhuyi').html(jsonObj.attention);
+
+
+            var player = videojs("my-video", {
+                autoplay:false
+            }, function(){
+                player.src(jsonObj.attention.video_path);
+                player.load(jsonObj.attention.video_path);
+                player.play();
+            })
+
+
+        },
+        error:function(){
+            alert(JSON.stringify(error));
+        }
+    });
+
+
+
+</script>
+</body>
+</html>

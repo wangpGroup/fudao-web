@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <!--<link rel="stylesheet" href="css/global.css" type="text/css" />-->
+    <link href="./css/video-js.css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <!--<script src="js/mui.min.js"></script>-->
+    <script src="js/config.js"></script>
+
+    <style>
+        *{
+            padding: 0;
+            margin:0
+        }
+        li{
+            list-style: none;
+        }
+        .content_text{
+            text-indent: 30px;
+        }
+        .explain{
+
+        }
+        .explain_title{
+            height:50px;
+            background-color:#ebeef6;
+            line-height: 50px;
+            font-size: 16px;
+            text-align: center;
+        }
+        .explain_detail{
+            margin: 20px;
+        }
+        .explain_detail li{
+            overflow: hidden;
+            list-style: none;
+            font-size: 14px;
+        }
+        .explain_detail li div{
+            float: left;
+        }
+        .explain_title_box{
+            background: #eeeeee;
+            height:54px;
+            padding:8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .explain_title_box div{
+            float: left;
+        }
+        .explain_img{
+            margin-right: 20px;
+        }
+        .explain_text{
+            line-height: 58px;
+        }
+        .xiazai{
+            height:50px;
+            width:100%;
+            background:#d0d6ea;
+            position: fixed;
+            bottom:0;
+            line-height: 50px;
+
+        }
+        .xzbtn{
+            position: absolute;
+            right:10px;
+            border-radius: 20px;
+            width:80px;
+            height:30px;
+            margin-top: 8px;
+            display: inline-block;
+            background-color: #646a96;
+            line-height: 20px;
+            color: #fff;
+            padding-left: 10px;
+        }
+        .xzfont{
+            line-height:30px;
+            background: url("./img/xiazai.png") no-repeat left center;
+            background-size:18px;
+            padding-left: 28px;
+        }
+        .erweima{
+            text-align: center;
+            margin:70px;
+
+        }
+        .erfont{
+            display: block;
+            color: #666666;
+            font-size: 12px;
+        }
+       /* 播放按钮变○圆形*/
+        .video-js .vjs-big-play-button{
+            font-size: 2em;
+            line-height: 2em;
+            height: 2em;
+            width: 2em;
+            -webkit-border-radius: 2em;
+            -moz-border-radius: 2em;
+            border-radius: 2em;
+            background-color: #73859f;
+            background-color: rgba(115,133,159,.5);
+            border-width: 0.1em;
+            margin-top: -1em;
+            margin-left: -1.25em;
+        }
+        /* 中间的播放箭头 */
+        .vjs-big-play-button .vjs-icon-placeholder {
+            font-size: 1.63em;
+        }
+        /* 加载圆圈 */
+        .vjs-loading-spinner {
+            font-size: 2em;
+            width: 2em;
+            height: 2em;
+            border-radius: 1em;
+            margin-top: -1em;
+            margin-left: -1em;
+        }
+
+      /*  点击屏幕切换播放/暂停*/
+        .video-js.vjs-playing .vjs-tech {
+            pointer-events: auto;
+        }
+
+        .vjs-paused .vjs-big-play-button,
+        .vjs-paused.vjs-has-started .vjs-big-play-button {
+            display: block;
+        }
+        .m{margin-left: auto; margin-right: auto;position: relative}
+        .my-video-dimensions{
+            width: 100%;
+            height: 200px;
+        }
+        .active_border{
+            border:1px solid #666666;
+
+        }
+        .fl{
+            float: left;
+        }
+        .img_bar{
+            text-align: center;
+        }
+        .img_bar img{
+            height:50px;
+            width:50px;
+        }
+        .img_bar li{
+            margin:5px 5px;
+        }
+        .modelBox{
+            width:100%;
+            height:100%;
+            background: rgba(0,0,0,.7);
+            position: fixed;
+            top:0;
+            left:0;
+            z-index: 100000;
+            display: none;
+        }
+        .model{
+            width:70%;
+            height:120px;
+            background: #fff;
+            position: absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom: 0;
+            margin:auto
+        }
+        .model_btn{
+            color: #fff;float: left;width:50%;text-align: center
+        }
+    </style>
+</head>
+<body>
+<div style="margin:15px; font-family: Arial">
+    <h3 class="content_title_text"></h3>
+    <div class="source_view_t">
+        <p class="source_text" style="padding-top: 20px;">福道时代——活动</p>
+    </div>
+</div>
+
+
+    <!--<video id="example_video_1" class="video-js vjs-default-skin vjs-fluid vjs-big-play-centered" controls width="100%" height="200">
+        <source src="./img/f7a15b5065686ec0b9486b0e584a944c.mp4" type='video/mp4' />
+    </video>-->
+
+<!--http://jq22com.qiniudn.com/jq22-sp.mp4-->
+</div>
+<div class="m">
+    <div style="position:absolute;right:10px;top:20px;z-index: 10000">
+        <img src='./img/jingyin.png' style="width: 26px; height: 26px"/>
+    </div>
+    <video id="my-video" class="video-js vjs-default-skin vjs-big-play-centered  " controls preload="auto" width="100%" height="200"
+           poster="m.png" data-setup="{}">
+        <source src="./img/f7a15b5065686ec0b9486b0e584a944c.mp4 " type="video/mp4">
+        <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a web browser that
+            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+        </p>
+    </video>
+</div>
+<div class="img_bar">
+    <ul style="overflow: hidden;display: inline-block;margin: 5px;">
+        <li class="active_border fl"><img src="./img/dongzuo.png" alt=""></li>
+        <li class="fl"><img src="./img/dongzuo.png" alt=""></li>
+        <li class="fl"><img src="./img/dongzuo.png" alt=""></li>
+    </ul>
+</div>
+<div id="activitys">
+    <div class="explain_title">摇头晃脑活动说明</div>
+</div>
+<div class="modelBox">'
+   <div class="model">'
+        <div style="text-align: center;height: 60px;padding-top: 20px;">
+            <div>
+                <p>此动作为收费动作</p>
+                <p>请下载活动APP付费观看</p>
+             </div>
+        </div>
+        <div  style="height:40px;line-height: 40px;overflow: hidden">
+            <div id="qx" class="model_btn" style="background: #d2d2d2;">取消</div>
+            <div id="xz" class="model_btn" style="background: #aeb0d7;">下载</div>
+            </div>
+        </div>
+    </div>
+
+
+<div class="xiazai">
+    <div style="margin:0 auto;">
+        <span style="margin-left:10px;">更多养生动作请下载「活动」App</span>
+        <a class="xzbtn">
+            <span class="xzfont">下载</span>
+        </a>
+    </div>
+
+</div>
+<div class="erweima">
+    <img style="height:80px;background: red" src="./img/er.png" alt="">
+    <span class="erfont" >（限安卓用户）</span>
+</div>
+
+
+<script src="js/video/video.min.js"></script>
+
+
+
+<script type="text/javascript">
+    //http://localhost:3000/articleDetail.html?token=867200022156895,86720002215690393791782&id=389
+    //867200022156895,86720002215690393791782
+
+
+
+    /* var video = document.getElementById("my-video");
+    var player = videojs("my-video", {
+        autoplay:false
+    }, function(){
+        player.src = vList[curr];
+        player.load();
+        player.play();
+    })*/
+   /* var video = document.createElement("my-video");
+     video.setAttribute("width", "100%");
+     video.setAttribute("height", "500");
+     video.setAttribute("id", "example_video_1");
+     video.setAttribute("class", "video-js vjs-default-skin");
+     video.setAttribute("preload", "none");
+     video.setAttribute("poster", "video//demo.jpg");
+     video.setAttribute("data-setup", "{}");
+     video.setAttribute("controls", "yes");
+     document.getElementById("playervideo").appendChild(video);
+    //document.body.appendChild(video);*/
+
+   /* video.addEventListener('ended', play);
+    play();
+    function play(e) {
+        alert(curr)
+        video.src = vList[curr];
+        video.load();
+        video.play();
+        curr++;
+        if(curr >= vLen){
+            curr = 0; // 播放完了，重新播放
+        }
+
+    }*/
+
+    var vList = ["./img/f7a15b5065686ec0b9486b0e584a944c.mp4 ", 'http://jq22com.qiniudn.com/jq22-sp.mp4']; // 初始化播放列表
+    var vLen = vList.length; // 播放列表的长度
+    var curr = 0; // 当前播放的视频
+    var player = videojs("my-video", {
+        autoplay:false
+    }, function(){
+       player.src(vList[curr]);
+       player.load(vList[curr]);
+       player.play();
+       curr++;
+       if(curr >= vLen){
+           curr = 0; // 播放完了，重新播放
+       }
+    })
+
+
+    player.on("ended", function(){
+        playUrl(vList[curr])
+    });
+var playUrl=function(url){
+    var myPlayer= videojs("my-video", {}, function() {
+        $("#mymoda .video-con #my-video source").attr("src", url);
+        myPlayer.src(url);
+        myPlayer.load(url);
+        myPlayer.play();
+        curr++;
+        if(curr >= vLen){
+            curr = 0; // 播放完了，重新播放
+        }
+    });
+    $(".click-modal").click();
+}
+
+
+
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    var argumentId=getQueryString('id');
+    var title;
+
+    $.ajax({
+        type:"post",
+        url:urls.SHAREAPI_GETSHAREONEACTTIVITYGROUP,
+        data:{
+            groupId:'00833B352A1C4851A341C572BFB154E1'
+        },
+        success:function(msg){
+            var jsonObj= msg.obj.activityGroup;
+
+            /*$('.content_title_text').html(jsonObj.title);
+            $('title').html(jsonObj.title);
+            var newContent=jsonObj.content.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi,function(match,capture){
+                //capture,返回每个匹配的字符串
+                var newStr='<img src="'+urls.IMGSRC+capture+' "style="width:100%; height:auto;margin-left: -30px" />';
+                return newStr;
+            });
+            $('.content_text').html(newContent);
+            title=jsonObj.title;*/
+            for(var i=0;i<jsonObj.activitys.length;i++){
+                var html='<div class="explain_detail">'
+                        +'<div class="explain_title_box">'
+                        +'<div class="explain_img" ><img style="height:54px" src="'+urls.IMGSRC+jsonObj.activitys[i].pic_path+'" style="width:100%;"></div>'
+                        +'<div class="explain_text">'+jsonObj.activitys[i].name+'</div>'
+                        +'</div>'
+                        +'<ul style="line-height: 24px">'
+                        +'<li style=" margin-bottom: 10px">'
+                        +'<div style="width:18%;">方法：</div>'
+                        +'<div style="width:82%" >'+jsonObj.activitys[i].act_method+'</div>'
+                        +'</li>'
+                        +'<li style=" margin-bottom: 10px">'
+                        +'<div style="width:18%;">效果：</div>'
+                        +'<div style="width:82%">'+jsonObj.activitys[i].effect+'</div>'
+                        +'</li>'
+                        +'<li style=" margin-bottom: 10px">'
+                        +'<div style="width:18%;">注意：</div>'
+                        +'<div style="width:82%">'+jsonObj.activitys[i].attention+'</div>'
+                        +'</li>'
+                        +'</ul>'
+                        +'</div>'
+                        $('#activitys').append(html)
+
+            }
+
+        },
+        error:function(){
+            alert(JSON.stringify(error));
+        }
+    });
+    $('#qx').click(function(){
+        $('.modelBox').hide()
+    });
+    $('#xz').click(function(){
+        $('.modelBox').hide()
+    })
+
+    $('.img_bar li').click(function(){
+        $(this).addClass('active_border').siblings().removeClass('active_border')
+       /* http://jq22com.qiniudn.com/jq22-sp.mp4*/
+        playUrl(vList[1])
+    })
+
+
+</script>
+</body>
+</html>

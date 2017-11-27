@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/global.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="js/echarts.common.min.js"></script>
+    <script src="js/config.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <div id="echart" style="height:250px"></div>
+</div>
+<script type="text/javascript">
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+    var token = getQueryString('token');
+    var yearMonth = getQueryString('yearMonth');
+    var index = new Date().getDate() -1 < 10 ? 10 :new Date().getDate() -1
+    $.ajax({
+        type: "get",
+        url: urls.ARTICLE_GETWEEKSCORE,
+        headers: {authorization: token},
+        data:{yearMonth: yearMonth},
+        success: function (res) {
+            var myEchart, scoreArr, scoreArrLength
+            var arrY = [],arrX = []
+            res.obj.planList.forEach(function (p1, p2, p3) {
+                arrX.push(p1.daynum)
+                arrY.push(p1.score)
+            })
+
+            myEchart = echarts.init(document.getElementById('echart'))
+            var option = {
+                tooltip: {
+                    show: false,
+                    trigger: 'axis',
+                    formatter: function (params) {
+                        params = params[0];
+                        return params.value + '分';
+                    },
+                    position: function () {
+
+                    }
+                },
+                xAxis: {
+                    boundaryGap: false,
+                    type: 'category',
+                    data: arrX
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '分数',
+                    min: 0,
+                    splitLine: {
+                        show: false
+                    }
+                },
+                dataZoom: [{
+                    type: 'inside',
+
+                    startValue: index-10,
+                    endValue: index,
+                }, {
+                    type: 'slider',
+                    show: false,
+
+                }],
+                series: {
+                    type: 'line',
+                    smooth: true,
+                    lineStyle: {
+                        normal: {
+                            color: '#7B1F82',
+                            width: 4,
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            borderWidth: 4,
+                            borderColor: '#949AAA',
+                            color: '#949AAA',
+
+                        },
+                        emphasis: {
+                            borderWidth: 8,
+                            borderColor: '#949AAA',
+                            color: '#fff',
+
+                        }
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    },
+                    data: arrY
+                },
+                animation: false
+            };
+            myEchart.setOption(option)
+            myEchart.on('click', function (params) {
+                window.postMessage(params.value)
+            });
+            myEchart.dispatchAction({
+                type: 'showTip',
+                seriesIndex: '0',
+                dataIndex: index
+            })
+        },
+        error: function (error) {
+            console.log(JSON.stringify(error));
+        }
+    });
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
